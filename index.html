@@ -166,12 +166,13 @@ footer{text-align:center;color:#657087;padding:30px;font-size:12px}
     <p>Your intelligent messaging assistant is being built. Manage your profile and AI preferences here.</p>
   </div>
 
-  <div class="nav">
+<div class="nav">
     <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
     <button onclick="showPage('connections',this)">Connections</button>
     <button onclick="showPage('assistant',this)">AI Assistant</button>
+    <button onclick="showPage('replyStudio',this)">Reply Studio</button>
     <button onclick="showPage('settings',this)">Profile</button>
-  </div>
+</div>
 
   <section id="dashboard" class="page">
     <div class="stats">
@@ -252,7 +253,60 @@ footer{text-align:center;color:#657087;padding:30px;font-size:12px}
       <p id="aiMessage" class="message"></p>
     </div>
   </section>
+<section id="replyStudio" class="page hidden">
+  <div class="card">
+    <h2>✨ REPLYX Reply Studio</h2>
+    <p>Turn incoming messages into thoughtful replies.</p>
 
+    <label>Incoming message</label>
+    <textarea
+      id="incomingMessage"
+      placeholder="Paste the message you received here..."
+      rows="5"
+      style="width:100%;padding:13px;margin:7px 0 17px;background:#0b1020;color:white;border:1px solid var(--border);border-radius:8px;resize:vertical"
+    ></textarea>
+
+    <label>Reply personality</label>
+    <select id="replyPersonality">
+      <option>Use my saved personality</option>
+      <option>Friendly</option>
+      <option>Professional</option>
+      <option>Casual</option>
+      <option>Funny</option>
+      <option>Helpful</option>
+    </select>
+
+    <label>Reply length</label>
+    <select id="replyLength">
+      <option>Short</option>
+      <option>Medium</option>
+      <option>Detailed</option>
+    </select>
+
+    <button class="btn" id="generateReply">
+      Generate AI Reply
+    </button>
+
+    <p id="replyMessage" class="message"></p>
+
+    <div id="replyResult" class="hidden">
+      <h3>Suggested response</h3>
+      <textarea
+        id="generatedReply"
+        rows="5"
+        style="width:100%;padding:13px;background:#0b1020;color:white;border:1px solid var(--border);border-radius:8px"
+      ></textarea>
+
+      <button class="btn secondary" id="copyReply">
+        Copy response
+      </button>
+    </div>
+
+    <div class="notice" style="margin-top:20px">
+      Replies are suggestions for you to review. Nothing is sent automatically.
+    </div>
+  </div>
+</section>
   <section id="settings" class="page hidden">
     <div class="card">
       <h2>Your profile</h2>
@@ -493,7 +547,63 @@ $("saveAI").addEventListener("click",async()=>{
     $("saveAI").disabled=false;
   }
 });
+$("generateReply").addEventListener("click",async()=>{
+  const incoming=$("incomingMessage").value.trim();
 
+  if(!incoming){
+    message("replyMessage","Please paste an incoming message first.","error");
+    return;
+  }
+
+  if(!aiEnabled){
+    message("replyMessage","Please enable your AI Assistant in AI Assistant settings first.","error");
+    return;
+  }
+
+  const button=$("generateReply");
+  button.disabled=true;
+  button.textContent="Generating...";
+
+  $("replyResult").classList.add("hidden");
+
+  try{
+    const {data,error}=await supabase.functions.invoke("generate-reply",{
+      body:{
+        message:incoming,
+        personality:$("replyPersonality").value,
+        length:$("replyLength").value
+      }
+    });
+
+    if(error)throw error;
+
+    if(!data?.reply){
+      throw new Error("The AI service did not return a reply.");
+    }
+
+    $("generatedReply").value=data.reply;
+    $("replyResult").classList.remove("hidden");
+    message("replyMessage","Your suggested reply is ready!");
+  }catch(error){
+    message(
+      "replyMessage",
+      "AI service is not connected yet. We'll configure the secure AI backend next. "+error.message,
+      "error"
+    );
+  }finally{
+    button.disabled=false;
+    button.textContent="Generate AI Reply";
+  }
+});
+
+$("copyReply").addEventListener("click",async()=>{
+  try{
+    await navigator.clipboard.writeText($("generatedReply").value);
+    message("replyMessage","Response copied successfully!");
+  }catch(error){
+    message("replyMessage","Could not copy. Select and copy the text manually.","error");
+  }
+});
 $("saveProfile").addEventListener("click",async()=>{
   if(!currentUser)return;
 
