@@ -3,471 +3,545 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REPLYX | Smart Messaging Assistant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REPLYX | Smart Messaging</title>
 <style>
 :root {
   --bg:#090b14;
-  --panel:#111522;
-  --panel2:#171d2e;
+  --panel:#121827;
+  --panel2:#1c2540;
   --purple:#8875ff;
   --blue:#39a8ff;
   --text:#f4f5ff;
-  --muted:#929bb1;
-  --border:#252c40;
+  --muted:#9ba6bd;
+  --border:#29334a;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
+  margin:0;background:var(--bg);color:var(--text);
   font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
 }
 button,input,select{font:inherit}
 button{cursor:pointer}
-.layout{display:flex;min-height:100vh}
-.sidebar{
-  width:245px;
-  background:#0d111d;
-  border-right:1px solid var(--border);
-  padding:25px 17px;
-  position:fixed;
-  height:100vh;
+header{
+  padding:18px 6%;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;
 }
 .logo{
-  font-size:27px;
-  font-weight:900;
-  letter-spacing:2px;
-  margin:5px 10px 8px;
+  font-size:27px;font-weight:900;letter-spacing:2px;
   background:linear-gradient(90deg,#a18aff,#43b5ff);
-  color:transparent;
-  background-clip:text;
+  color:transparent;background-clip:text;
 }
-.tagline{color:var(--muted);font-size:11px;margin:0 10px 35px}
-.nav-title{color:#707b94;font-size:11px;margin:25px 10px 12px}
-.nav button{
-  width:100%;text-align:left;padding:13px 12px;
-  border:0;background:transparent;color:#aeb7ca;
-  border-radius:9px;margin-bottom:5px;
-}
-.nav button.active,.nav button:hover{
-  background:#20213a;color:white;
-}
-.main{margin-left:245px;width:calc(100% - 245px);padding:30px 35px}
-.topbar{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:15px;margin-bottom:30px;
-}
-.topbar h1{font-size:25px;margin:0}
-.topbar p{color:var(--muted);font-size:13px}
-.profile{
-  background:var(--panel2);padding:10px 15px;
-  border:1px solid var(--border);border-radius:10px;
-  font-size:13px;
-}
-.section{display:none}
-.section.active{display:block}
-.hero{
-  background:linear-gradient(120deg,#29204c,#142d49);
-  padding:28px;border-radius:17px;
-  border:1px solid #443c75;margin-bottom:25px;
-}
-.hero h2{font-size:27px;margin:0 0 10px}
-.hero p{color:#c1c5dc;line-height:1.6;max-width:600px}
-.btn{
-  padding:11px 17px;border:0;border-radius:8px;
-  background:linear-gradient(90deg,var(--purple),var(--blue));
-  color:white;font-weight:bold;
-}
-.btn.secondary{
-  background:#20283c;border:1px solid var(--border);
-}
-.stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:15px;margin-bottom:25px;
-}
+.header-right{display:flex;gap:10px;align-items:center}
+main{max-width:1050px;margin:auto;padding:35px 20px}
+.hidden{display:none!important}
 .card{
   background:var(--panel);border:1px solid var(--border);
-  border-radius:13px;padding:20px;
+  border-radius:14px;padding:23px;margin-bottom:18px;
 }
-.stat-label{color:var(--muted);font-size:13px}
-.stat-number{font-size:27px;font-weight:bold;margin-top:12px}
-.grid{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:16px;
+h1{font-size:30px;margin-top:0}
+h2{font-size:21px}
+p{color:var(--muted);line-height:1.6}
+.btn{
+  background:linear-gradient(90deg,var(--purple),var(--blue));
+  border:0;color:white;padding:12px 18px;
+  border-radius:8px;font-weight:bold;
 }
-.card h3{margin:0 0 12px;font-size:16px}
-.card p{color:var(--muted);font-size:13px;line-height:1.6}
+.btn.secondary{
+  background:var(--panel2);border:1px solid var(--border);
+}
+.btn.danger{background:#8e344d}
+input,select{
+  width:100%;padding:13px;margin:7px 0 17px;
+  border:1px solid var(--border);border-radius:8px;
+  background:#0b1020;color:white;
+}
+label{font-size:13px}
+.auth{
+  max-width:440px;margin:35px auto;
+}
+.auth h1{text-align:center}
+.auth .logo{text-align:center;margin-bottom:12px}
+.auth button{width:100%}
+.message{font-size:13px;line-height:1.6;margin-top:12px}
+.success{color:#62dfa1}
+.error{color:#ff8795}
+.nav{
+  display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px;
+}
+.nav button{
+  background:var(--panel2);color:white;
+  border:1px solid var(--border);padding:11px 15px;
+  border-radius:8px;
+}
+.nav button.active{background:#5747a9}
+.stats,.grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:15px;
+}
+.stat-number{font-size:25px;font-weight:bold;margin-top:10px}
 .platform{
-  display:flex;align-items:center;gap:13px;
+  background:#0c1220;border:1px solid var(--border);
+  padding:16px;border-radius:10px;
 }
-.platform-icon{
-  width:43px;height:43px;display:grid;
-  place-items:center;background:var(--panel2);
-  border-radius:12px;font-size:23px;
-}
-.platform-info{flex:1}
-.platform-info strong{font-size:14px}
-.platform-info small{display:block;color:var(--muted);margin-top:5px}
-.status{font-size:11px;color:#e5bd69}
-.switch{
-  position:relative;width:45px;height:24px;
-  background:#343c50;border-radius:20px;
-  border:0;flex-shrink:0;
-}
-.switch:after{
-  content:"";position:absolute;width:18px;height:18px;
-  background:white;border-radius:50%;top:3px;left:3px;
-  transition:.2s;
-}
-.switch.on{background:#7561e9}
-.switch.on:after{left:24px}
+.platform strong{display:block;margin-bottom:8px}
+.status{font-size:12px;color:#e5bd69}
 .control{
   display:flex;justify-content:space-between;
   align-items:center;gap:15px;padding:15px 0;
   border-bottom:1px solid var(--border);
 }
-.control:last-child{border:0}
-.control strong{font-size:13px}
 .control small{display:block;color:var(--muted);margin-top:5px}
-.field{margin:18px 0}
-.field label{display:block;font-size:13px;margin-bottom:9px}
-.field input,.field select{
-  width:100%;padding:13px;background:#0b1020;
-  color:white;border:1px solid var(--border);
-  border-radius:8px;outline:none;
+.switch{
+  width:45px;height:24px;border:0;border-radius:20px;
+  background:#414a60;position:relative;flex-shrink:0;
 }
+.switch:after{
+  content:"";position:absolute;left:3px;top:3px;
+  width:18px;height:18px;border-radius:50%;background:white;
+}
+.switch.on{background:#7561e9}
+.switch.on:after{left:24px}
 .notice{
-  background:#28233c;border:1px solid #51447a;
-  padding:14px;border-radius:9px;
-  color:#d7d0ff;font-size:12px;line-height:1.6;
-  margin:15px 0;
+  padding:14px;background:#29233e;
+  border:1px solid #554780;border-radius:9px;
+  font-size:13px;color:#ddd5ff;line-height:1.6;
 }
-.conversation{
-  background:#0c1220;padding:14px;
-  border-radius:10px;margin:12px 0;
-  max-width:85%;font-size:13px;line-height:1.5;
-}
-.conversation.reply{margin-left:auto;background:#27234b}
-.muted{color:var(--muted)}
-footer{
-  color:#657087;text-align:center;font-size:12px;
-  margin-top:45px;padding:20px;
-}
-@media(max-width:800px){
-  .sidebar{width:65px;padding:18px 7px}
-  .logo{font-size:15px;margin:8px 0}
-  .tagline,.nav-title,.nav span{display:none}
-  .nav button{text-align:center;padding:14px 4px;font-size:18px}
-  .main{margin-left:65px;width:calc(100% - 65px);padding:20px 14px}
-  .stats{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr}
-  .topbar h1{font-size:20px}
+footer{text-align:center;color:#657087;padding:30px;font-size:12px}
+@media(max-width:650px){
+  .stats,.grid{grid-template-columns:1fr}
+  header{padding:15px}
+  main{padding:22px 14px}
 }
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
+<header>
   <div class="logo">REPLYX</div>
-  <div class="tagline">YOUR SMART MESSAGING ASSISTANT</div>
-
-  <div class="nav-title">MAIN MENU</div>
-  <div class="nav">
-    <button class="active" onclick="showPage('dashboard',this)">🏠 <span>Dashboard</span></button>
-    <button onclick="showPage('connections',this)">🔗 <span>Connections</span></button>
-    <button onclick="showPage('assistant',this)">🤖 <span>AI Assistant</span></button>
-    <button onclick="showPage('settings',this)">⚙️ <span>Settings</span></button>
+  <div class="header-right">
+    <span id="headerUser" class="muted"></span>
+    <button id="logoutBtn" class="btn secondary hidden">Logout</button>
   </div>
-
-  <div class="nav-title">ACCOUNT</div>
-  <div class="nav">
-    <button onclick="showPage('about',this)">ℹ️ <span>About REPLYX</span></button>
-  </div>
-</aside>
-
-<main class="main">
-<header class="topbar">
-  <div>
-    <h1 id="pageTitle">Dashboard</h1>
-    <p>Your messages, managed intelligently.</p>
-  </div>
-  <div class="profile">👤 REPLYX USER</div>
 </header>
 
+<main>
+
+<!-- AUTHENTICATION -->
+<section id="authSection" class="auth">
+  <div class="card">
+    <div class="logo">REPLYX</div>
+    <h1 id="authTitle">Welcome back</h1>
+    <p id="authDescription">Sign in to your messaging assistant.</p>
+
+    <form id="authForm">
+      <div id="nameField" class="hidden">
+        <label>Display name</label>
+        <input id="nameInput" type="text" placeholder="Your name">
+      </div>
+
+      <label>Email address</label>
+      <input id="emailInput" type="email" required placeholder="Enter your email">
+
+      <label>Password</label>
+      <input id="passwordInput" type="password" required minlength="6" placeholder="At least 6 characters">
+
+      <button class="btn" id="authSubmit" type="submit">Sign in</button>
+    </form>
+
+    <p id="authMessage" class="message"></p>
+
+    <p style="text-align:center">
+      <span id="switchText">Don't have an account?</span>
+      <button id="switchAuth" class="btn secondary">Create account</button>
+    </p>
+  </div>
+</section>
+
 <!-- DASHBOARD -->
-<section class="section active" id="dashboard">
-  <div class="hero">
-    <h2>Welcome to REPLYX 👋</h2>
-    <p>Your intelligent messaging assistant is ready to help you manage conversations and create natural AI-assisted responses.</p>
-    <button class="btn" onclick="showPage('assistant')">Configure AI Assistant →</button>
-  </div>
-
-  <div class="stats">
-    <div class="card">
-      <div class="stat-label">Connected Platforms</div>
-      <div class="stat-number" id="connectedCount">0</div>
-    </div>
-    <div class="card">
-      <div class="stat-label">AI Assistant</div>
-      <div class="stat-number" id="assistantStatus">OFF</div>
-    </div>
-    <div class="card">
-      <div class="stat-label">Reply Mode</div>
-      <div class="stat-number" style="font-size:19px">Automatic</div>
-    </div>
-  </div>
-
-  <h3>Messaging platforms</h3>
-  <div class="grid">
-    <div class="card platform">
-      <div class="platform-icon">💬</div>
-      <div class="platform-info"><strong>WhatsApp</strong><small>Not connected</small></div>
-      <span class="status">Coming soon</span>
-    </div>
-    <div class="card platform">
-      <div class="platform-icon">✈️</div>
-      <div class="platform-info"><strong>Telegram</strong><small>Not connected</small></div>
-      <span class="status">Coming soon</span>
-    </div>
-    <div class="card platform">
-      <div class="platform-icon">📸</div>
-      <div class="platform-info"><strong>Instagram</strong><small>Not connected</small></div>
-      <span class="status">Coming soon</span>
-    </div>
-    <div class="card platform">
-      <div class="platform-icon">📱</div>
-      <div class="platform-info"><strong>SMS</strong><small>Not connected</small></div>
-      <span class="status">Coming soon</span>
-    </div>
-  </div>
-
-  <div class="notice">
-    This is REPLYX 1.0's interface preview. No messages are currently being received or sent. Real messaging integrations and backend services are still being developed.
-  </div>
-</section>
-
-<!-- CONNECTIONS -->
-<section class="section" id="connections">
-  <h2>Connect your platforms</h2>
-  <p class="muted">Manage the messaging services you want REPLYX to support.</p>
-  <div class="grid">
-    <div class="card">
-      <div class="platform"><div class="platform-icon">💬</div><strong>WhatsApp</strong></div>
-      <p>Connect through supported WhatsApp Business integrations.</p>
-      <button class="btn secondary" onclick="comingSoon()">Coming soon</button>
-    </div>
-    <div class="card">
-      <div class="platform"><div class="platform-icon">✈️</div><strong>Telegram</strong></div>
-      <p>Explore Telegram bot integrations.</p>
-      <button class="btn secondary" onclick="comingSoon()">Coming soon</button>
-    </div>
-    <div class="card">
-      <div class="platform"><div class="platform-icon">📸</div><strong>Instagram</strong></div>
-      <p>Explore official Instagram messaging integrations.</p>
-      <button class="btn secondary" onclick="comingSoon()">Coming soon</button>
-    </div>
-    <div class="card">
-      <div class="platform"><div class="platform-icon">📱</div><strong>SMS</strong></div>
-      <p>Plan Android SMS integration with appropriate permissions.</p>
-      <button class="btn secondary" onclick="comingSoon()">Coming soon</button>
-    </div>
-  </div>
-</section>
-
-<!-- AI ASSISTANT -->
-<section class="section" id="assistant">
-  <h2>AI Assistant</h2>
-  <p class="muted">Customize how REPLYX generates responses.</p>
+<section id="dashboardSection" class="hidden">
 
   <div class="card">
-    <div class="control">
-      <div><strong>Enable AI Assistant</strong><small>Turn the assistant on or off.</small></div>
-      <button class="switch" id="aiSwitch" onclick="toggleAI()"></button>
-    </div>
-
-    <div class="field">
-      <label>AI personality</label>
-      <select id="personality">
-        <option>Friendly</option>
-        <option>Professional</option>
-        <option>Casual</option>
-        <option>Funny</option>
-        <option>Helpful</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Response style</label>
-      <select id="responseStyle">
-        <option>Short and natural</option>
-        <option>Detailed and helpful</option>
-        <option>Simple and direct</option>
-      </select>
-    </div>
-
-    <div class="control">
-      <div><strong>Automatic replies</strong><small>Allow approved integrations to send generated replies.</small></div>
-      <button class="switch on" id="autoSwitch" onclick="toggleAuto()"></button>
-    </div>
-
-    <div class="control">
-      <div><strong>AI disclosure</strong><small>Identify AI-generated responses to recipients.</small></div>
-      <button class="switch on" id="disclosureSwitch" onclick="toggleDisclosure()"></button>
-    </div>
-
-    <button class="btn" onclick="saveSettings()">Save preferences</button>
-    <p id="saveMessage" class="muted"></p>
+    <h1>Welcome to REPLYX 👋</h1>
+    <p>Your intelligent messaging assistant is being built. Manage your profile and AI preferences here.</p>
   </div>
 
-  <div class="card" style="margin-top:20px">
-    <h3>Response preview</h3>
-    <div class="conversation">Hello! Are you available today?</div>
-    <div class="conversation reply" id="previewReply">Hi! Thanks for your message. How can I help you today? This reply is AI-generated.</div>
-    <p class="muted">Example preview only. No message is being sent.</p>
-    <button class="btn secondary" onclick="updatePreview()">Refresh preview</button>
+  <div class="nav">
+    <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+    <button onclick="showPage('connections',this)">Connections</button>
+    <button onclick="showPage('assistant',this)">AI Assistant</button>
+    <button onclick="showPage('settings',this)">Profile</button>
   </div>
-</section>
 
-<!-- SETTINGS -->
-<section class="section" id="settings">
-  <h2>Settings</h2>
-  <div class="card">
-    <h3>Account preferences</h3>
-    <div class="field">
+  <section id="dashboard" class="page">
+    <div class="stats">
+      <div class="card">
+        <p>Connected platforms</p>
+        <div class="stat-number">0</div>
+      </div>
+      <div class="card">
+        <p>AI assistant</p>
+        <div class="stat-number" id="aiStatus">OFF</div>
+      </div>
+    </div>
+
+    <h2>Your messaging platforms</h2>
+    <div class="grid">
+      <div class="platform"><strong>💬 WhatsApp</strong><span class="status">Not connected</span></div>
+      <div class="platform"><strong>✈️ Telegram</strong><span class="status">Not connected</span></div>
+      <div class="platform"><strong>📸 Instagram</strong><span class="status">Not connected</span></div>
+      <div class="platform"><strong>📱 SMS</strong><span class="status">Not connected</span></div>
+    </div>
+
+    <div class="notice" style="margin-top:20px">
+      Messaging connections are not active yet. No messages are currently being read or sent.
+    </div>
+  </section>
+
+  <section id="connections" class="page hidden">
+    <div class="card">
+      <h2>Messaging connections</h2>
+      <p>Official messaging integrations will be added in future updates.</p>
+      <div class="platform">💬 WhatsApp — Coming soon</div><br>
+      <div class="platform">✈️ Telegram — Coming soon</div><br>
+      <div class="platform">📸 Instagram — Coming soon</div><br>
+      <div class="platform">📱 SMS — Coming soon</div>
+    </div>
+  </section>
+
+  <section id="assistant" class="page hidden">
+    <div class="card">
+      <h2>AI Assistant</h2>
+
+      <div class="control">
+        <div><strong>Enable AI Assistant</strong><small>Save your preferred assistant state.</small></div>
+        <button class="switch" id="aiSwitch" type="button"></button>
+      </div>
+
+      <div class="field">
+        <label>AI personality</label>
+        <select id="personality">
+          <option>Friendly</option>
+          <option>Professional</option>
+          <option>Casual</option>
+          <option>Funny</option>
+          <option>Helpful</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Response style</label>
+        <select id="responseStyle">
+          <option>Short and natural</option>
+          <option>Detailed and helpful</option>
+          <option>Simple and direct</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <div><strong>Automatic replies</strong><small>Preference for future connected services.</small></div>
+        <button class="switch" id="autoSwitch" type="button"></button>
+      </div>
+
+      <div class="control">
+        <div><strong>AI disclosure</strong><small>Identify AI-generated responses.</small></div>
+        <button class="switch on" id="disclosureSwitch" type="button"></button>
+      </div>
+
+      <button class="btn" id="saveAI">Save AI preferences</button>
+      <p id="aiMessage" class="message"></p>
+    </div>
+  </section>
+
+  <section id="settings" class="page hidden">
+    <div class="card">
+      <h2>Your profile</h2>
+
       <label>Display name</label>
-      <input id="displayName" placeholder="Your name">
-    </div>
-    <div class="field">
-      <label>Default language</label>
+      <input id="profileName" placeholder="Your name">
+
+      <label>Preferred language</label>
       <select id="language">
         <option>English</option>
         <option>Kiswahili</option>
       </select>
+
+      <button class="btn" id="saveProfile">Save profile</button>
+      <p id="profileMessage" class="message"></p>
     </div>
-    <button class="btn" onclick="saveProfile()">Save settings</button>
-    <p id="profileMessage" class="muted"></p>
-  </div>
-</section>
+  </section>
 
-<!-- ABOUT -->
-<section class="section" id="about">
-  <div class="hero">
-    <h2>About REPLYX</h2>
-    <p>REPLYX is an AI-powered messaging assistant designed to help people manage conversations and respond more efficiently.</p>
-  </div>
-  <div class="card">
-    <h3>Our mission</h3>
-    <p>Make messaging easier with intelligent, useful and responsible automation.</p>
-    <p><strong>Version:</strong> 1.0</p>
-    <p><strong>Developer:</strong> GT-R Technologies</p>
-    <p><strong>Status:</strong> Development</p>
-  </div>
 </section>
-
-<footer>REPLYX 1.0 · Powered by GT-R Technologies</footer>
 </main>
 
-<script>
-let aiEnabled=false;
-let autoEnabled=true;
-let disclosureEnabled=true;
+<footer>REPLYX 1.0 · Powered by GT-R Technologies</footer>
 
-function showPage(page,button){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(page).classList.add('active');
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-  if(button) button.classList.add('active');
-  const titles={
-    dashboard:'Dashboard',
-    connections:'Connections',
-    assistant:'AI Assistant',
-    settings:'Settings',
-    about:'About REPLYX'
-  };
-  document.getElementById('pageTitle').textContent=titles[page];
+<script type="module">
+import { createClient } from
+"https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL =
+"https://bbwpzdmxibedyssylrhq.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_47g12nhiJUBmBDq4oeaPsQ_L3aHo4w9";
+
+const supabase = createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+
+let isRegistering = false;
+let currentUser = null;
+let aiEnabled = false;
+let autoEnabled = false;
+let disclosureEnabled = true;
+
+function message(id,text,type="success"){
+  $(id).textContent=text;
+  $(id).className="message "+type;
 }
 
-function toggleAI(){
-  aiEnabled=!aiEnabled;
-  document.getElementById('aiSwitch').classList.toggle('on',aiEnabled);
-  document.getElementById('assistantStatus').textContent=aiEnabled?'ON':'OFF';
+function setAuthMode(register){
+  isRegistering=register;
+  $("authTitle").textContent=register?"Create your account":"Welcome back";
+  $("authDescription").textContent=register?
+    "Join REPLYX and manage your messaging preferences.":
+    "Sign in to your messaging assistant.";
+  $("nameField").classList.toggle("hidden",!register);
+  $("authSubmit").textContent=register?"Create account":"Sign in";
+  $("switchText").textContent=register?
+    "Already have an account?":"Don't have an account?";
+  $("switchAuth").textContent=register?"Sign in":"Create account";
+  message("authMessage","");
 }
 
-function toggleAuto(){
-  autoEnabled=!autoEnabled;
-  document.getElementById('autoSwitch').classList.toggle('on',autoEnabled);
-}
+$("switchAuth").addEventListener("click",()=>{
+  setAuthMode(!isRegistering);
+});
 
-function toggleDisclosure(){
-  disclosureEnabled=!disclosureEnabled;
-  document.getElementById('disclosureSwitch').classList.toggle('on',disclosureEnabled);
-}
+$("authForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const email=$("emailInput").value.trim();
+  const password=$("passwordInput").value;
+  const name=$("nameInput").value.trim();
 
-function saveSettings(){
-  const settings={
-    aiEnabled,
-    autoEnabled,
-    disclosureEnabled,
-    personality:document.getElementById('personality').value,
-    responseStyle:document.getElementById('responseStyle').value
-  };
-  localStorage.setItem('replyxSettings',JSON.stringify(settings));
-  document.getElementById('saveMessage').textContent='Preferences saved on this device.';
-  updatePreview();
-}
+  $("authSubmit").disabled=true;
+  $("authSubmit").textContent="Please wait...";
 
-function updatePreview(){
-  const personality=document.getElementById('personality').value;
-  const style=document.getElementById('responseStyle').value;
-  const responses={
-    Friendly:'Hey! Thanks for reaching out. How can I help you today?',
-    Professional:'Hello, thank you for your message. How may I assist you?',
-    Casual:'Hey! Got your message. What is up?',
-    Funny:'Hey! Your message has arrived. What can I do for you?',
-    Helpful:'Hello! I am here to help. What would you like to know?'
-  };
-  let reply=responses[personality];
-  if(style==='Short and natural') reply='Hi! Thanks for your message. How can I help?';
-  if(disclosureEnabled) reply+=' This reply is AI-generated.';
-  document.getElementById('previewReply').textContent=reply;
-}
-
-function saveProfile(){
-  const name=document.getElementById('displayName').value;
-  const language=document.getElementById('language').value;
-  localStorage.setItem('replyxProfile',JSON.stringify({name,language}));
-  document.getElementById('profileMessage').textContent='Settings saved on this device.';
-}
-
-function comingSoon(){
-  alert('This integration will be added in a future REPLYX update.');
-}
-
-function loadSettings(){
   try{
-    const s=JSON.parse(localStorage.getItem('replyxSettings'));
-    if(s){
-      aiEnabled=!!s.aiEnabled;
-      autoEnabled=!!s.autoEnabled;
-      disclosureEnabled=s.disclosureEnabled!==false;
-      document.getElementById('personality').value=s.personality||'Friendly';
-      document.getElementById('responseStyle').value=s.responseStyle||'Short and natural';
+    if(isRegistering){
+      if(!name){
+        throw new Error("Please enter your display name.");
+      }
+
+      const {data,error}=await supabase.auth.signUp({
+        email,
+        password,
+        options:{data:{display_name:name}}
+      });
+
+      if(error) throw error;
+
+      if(data.session){
+        message("authMessage","Account created successfully!");
+      }else{
+        message("authMessage",
+          "Account created. Check your email for a confirmation link before signing in.");
+      }
+    }else{
+      const {error}=await supabase.auth.signInWithPassword({
+        email,password
+      });
+      if(error) throw error;
     }
-    document.getElementById('aiSwitch').classList.toggle('on',aiEnabled);
-    document.getElementById('autoSwitch').classList.toggle('on',autoEnabled);
-    document.getElementById('disclosureSwitch').classList.toggle('on',disclosureEnabled);
-    document.getElementById('assistantStatus').textContent=aiEnabled?'ON':'OFF';
-    const p=JSON.parse(localStorage.getItem('replyxProfile'));
-    if(p){
-      document.getElementById('displayName').value=p.name||'';
-      document.getElementById('language').value=p.language||'English';
-    }
-  }catch(e){console.log('Settings could not be loaded.');}
-  updatePreview();
+  }catch(error){
+    message("authMessage",error.message,"error");
+  }finally{
+    $("authSubmit").disabled=false;
+    $("authSubmit").textContent=isRegistering?"Create account":"Sign in";
+  }
+});
+
+async function createUserRecords(user){
+  const name=user.user_metadata?.display_name||"";
+
+  const {error:profileError}=await supabase
+    .from("profiles")
+    .upsert({
+      id:user.id,
+      display_name:name
+    },{onConflict:"id"});
+
+  if(profileError) throw profileError;
+
+  const {error:settingsError}=await supabase
+    .from("reply_settings")
+    .upsert({
+      user_id:user.id
+    },{onConflict:"user_id"});
+
+  if(settingsError) throw settingsError;
 }
-loadSettings();
+
+async function loadUserData(user){
+  const {data:profile,error:profileError}=await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  if(profileError) throw profileError;
+
+  if(profile){
+    $("profileName").value=profile.display_name||"";
+    $("language").value=profile.preferred_language||"English";
+  }
+
+  const {data:settings,error:settingsError}=await supabase
+    .from("reply_settings")
+    .select("*")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(settingsError) throw settingsError;
+
+  if(settings){
+    aiEnabled=!!settings.ai_enabled;
+    autoEnabled=!!settings.auto_replies_enabled;
+    disclosureEnabled=settings.disclosure_enabled!==false;
+
+    $("personality").value=settings.personality||"Friendly";
+    $("responseStyle").value=settings.response_style||"Short and natural";
+  }
+
+  updateSwitches();
+}
+
+function updateSwitches(){
+  $("aiSwitch").classList.toggle("on",aiEnabled);
+  $("autoSwitch").classList.toggle("on",autoEnabled);
+  $("disclosureSwitch").classList.toggle("on",disclosureEnabled);
+  $("aiStatus").textContent=aiEnabled?"ON":"OFF";
+}
+
+async function enterDashboard(user){
+  currentUser=user;
+  $("authSection").classList.add("hidden");
+  $("dashboardSection").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
+  $("headerUser").textContent=user.email||"Account";
+
+  try{
+    await createUserRecords(user);
+    await loadUserData(user);
+  }catch(error){
+    console.error(error);
+    alert("Could not load your account data: "+error.message);
+  }
+}
+
+async function leaveDashboard(){
+  currentUser=null;
+  $("dashboardSection").classList.add("hidden");
+  $("authSection").classList.remove("hidden");
+  $("logoutBtn").classList.add("hidden");
+  $("headerUser").textContent="";
+}
+
+$("logoutBtn").addEventListener("click",async()=>{
+  const {error}=await supabase.auth.signOut();
+  if(error) alert(error.message);
+});
+
+$("aiSwitch").addEventListener("click",()=>{
+  aiEnabled=!aiEnabled;
+  updateSwitches();
+});
+
+$("autoSwitch").addEventListener("click",()=>{
+  autoEnabled=!autoEnabled;
+  updateSwitches();
+});
+
+$("disclosureSwitch").addEventListener("click",()=>{
+  disclosureEnabled=!disclosureEnabled;
+  updateSwitches();
+});
+
+$("saveAI").addEventListener("click",async()=>{
+  if(!currentUser)return;
+
+  $("saveAI").disabled=true;
+  try{
+    const {error}=await supabase.from("reply_settings").upsert({
+      user_id:currentUser.id,
+      ai_enabled:aiEnabled,
+      auto_replies_enabled:autoEnabled,
+      personality:$("personality").value,
+      response_style:$("responseStyle").value,
+      disclosure_enabled:disclosureEnabled,
+      updated_at:new Date().toISOString()
+    },{onConflict:"user_id"});
+
+    if(error) throw error;
+
+    message("aiMessage","AI preferences saved to Supabase!");
+    updateSwitches();
+  }catch(error){
+    message("aiMessage",error.message,"error");
+  }finally{
+    $("saveAI").disabled=false;
+  }
+});
+
+$("saveProfile").addEventListener("click",async()=>{
+  if(!currentUser)return;
+
+  try{
+    const {error}=await supabase.from("profiles").upsert({
+      id:currentUser.id,
+      display_name:$("profileName").value.trim(),
+      preferred_language:$("language").value
+    },{onConflict:"id"});
+
+    if(error) throw error;
+
+    message("profileMessage","Profile saved successfully!");
+  }catch(error){
+    message("profileMessage",error.message,"error");
+  }
+});
+
+window.showPage=(page,button)=>{
+  document.querySelectorAll(".page").forEach(section=>
+    section.classList.add("hidden")
+  );
+  $(page).classList.remove("hidden");
+
+  document.querySelectorAll(".nav button").forEach(b=>
+    b.classList.remove("active")
+  );
+  if(button)button.classList.add("active");
+};
+
+supabase.auth.onAuthStateChange((event,session)=>{
+  if(session?.user){
+    if(!currentUser){
+      enterDashboard(session.user);
+    }
+  }else{
+    leaveDashboard();
+  }
+});
+
+const {data:{session},error}=await supabase.auth.getSession();
+
+if(error){
+  console.error(error);
+}else if(session?.user){
+  await enterDashboard(session.user);
+}
+
 </script>
 </body>
 </html>
-
